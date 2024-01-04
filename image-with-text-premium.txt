@@ -1,0 +1,495 @@
+   
+
+{% comment %}
+  This is a Liquid comment. The following HTML content is based on the provided Shopify schema.
+{% endcomment %}
+<style>
+  .section-block-{{ section.id }} .section-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    /* max-width: {{ section.settings.container_size }}px; */
+    margin: auto;
+  }
+
+  .section-block-{{ section.id }} .bullet-points {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .section-block-{{ section.id }} .text-container.left * {
+    margin: 0;
+  }
+
+  .section-block-{{ section.id }} .text-container.left {
+    width: 100%;
+  }
+/* 
+  .section-block-{{ section.id }} .section-content {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  } */
+
+ .section-block-{{ section.id }} .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;border-radius: 18px;
+}
+ 
+
+  .section-block-{{ section.id }} b,.section-block-{{ section.id }} strong {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-family: 'Futura';
+}
+  
+  {% assign mg_top_desktop = section.settings.mg_top_desktop %}
+  {% assign mg_top_tablet = section.settings.mg_top_tablet %}
+  {% assign mg_top_mobile = section.settings.mg_top_mobile %}
+
+  {% assign mg_bottom_desktop = section.settings.mg_bottom_desktop %}
+  {% assign mg_bottom_tablet = section.settings.mg_bottom_tablet %}
+  {% assign mg_bottom_mobile = section.settings.mg_bottom_mobile %}
+
+  @media (min-width: 1200px) {
+    .section-block-{{ section.id }} { padding-top: {{ mg_top_desktop | append: 'px' }}; padding-bottom: {{ mg_bottom_desktop | append: 'px' }} }
+  }
+
+  @media (max-width: 990px) {
+    .section-block-{{ section.id }} { padding-top: {{ mg_top_tablet | append: 'px' }}; padding-bottom: {{ mg_bottom_tablet | append: 'px' }} }
+  }
+
+  @media (max-width: 540px) {
+    .section-block-{{ section.id }} { padding-top: {{ mg_top_mobile | append: 'px' }}; padding-bottom: {{ mg_bottom_mobile | append: 'px' }} }
+  }
+
+  {% if section.settings.right_image_left_content %}
+    .section-block-{{ section.id }} .right {
+      order: 2;
+    }
+  {% endif %}
+
+  .section-block-{{ section.id }} .section-title {
+    font-size: {{ section.settings.title_sizing }}px;
+    font-weight: 600;
+  }
+
+  .section-block-{{ section.id }} .section-subtitle * {
+    font-size: {{ section.settings.section_subtitle_sizing }}px;
+  }
+
+  .section-block-{{ section.id }} .description-one * {
+    font-size: {{ section.settings.section_desc_sizing }}px;
+  }
+
+  .section-block-{{ section.id }} .bullet-points {
+    font-size: {{ section.settings.bullet_font_sizing }}px;
+  }
+
+  @media (max-width: 540px) {
+    .section-block-{{ section.id }} .section-title {
+      font-size: {{ section.settings.title_sizing_mobile }}px;
+    }
+
+    .section-block-{{ section.id }} .section-subtitle * {
+      font-size: {{ section.settings.section_subtitle_sizing_mobile }}px;
+    }
+
+    .section-block-{{ section.id }} .description-one * {
+      font-size: {{ section.settings.section_desc_sizing_mobile }}px;
+    }
+
+    .section-block-{{ section.id }} .bullet-points {
+      font-size: {{ section.settings.bullet_font_sizing_mobile }}px;
+    }
+
+    .section-block-{{ section.id }} .section-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-left: {{ section.settings.padding_x }}px;
+      padding-right: {{ section.settings.padding_x }}px;
+      flex-direction: {{ section.settings.flex_dir }};
+    }
+     .section-block-{{ section.id }} .section-content { 
+        gap: 30px; 
+      }
+  }
+
+
+   .section-block-{{ section.id }} .description-one {
+    margin: 15px 0 !important;
+    }
+  .section-block-{{ section.id }} .bullet-points:not(:last-child) {
+    margin-bottom: 20px !important;
+    }
+
+ 
+  .bullet-points img {
+    min-width: 50px; 
+    height: 50px;
+    object-fit: contain;
+    padding: 6px;
+    border-radius: 90px;
+  } 
+
+  
+  .section-block-{{ section.id }} {
+    background: {{ section.settings.background_color }};
+    background: linear-gradient({{ section.settings.deg }}, {{ section.settings.background_color_1 }}{{ section.settings.background_color_1_o }} 50%, {{ section.settings.background_color_2 }}{{ section.settings.background_color_2_o }}), url({{ section.settings.background_image | img_url:'master' }});
+      background-size: cover;
+  }
+
+    .flip-container {
+          perspective: 800px;
+        }
+
+    .icon { 
+      transition: transform 0.4s;
+    }
+
+    .icon  {
+      transform: rotateY(0);
+    }
+   .bullet-points:hover .icon {
+      transform: rotateY(360deg);
+    }
+
+
+
+
+
+
+
+  
+  
+</style>
+
+<div class="image-with-text-custom section-block-{{ section.id }} {% if section.settings['right_image_left_content'] %}right-image{% else %}left-image{% endif %} ">
+  <div class="section-content container">
+    <div class="image-container right">
+      <img class="desktop-image" src="{{ section.settings.image_desktop | img_url: 'master' }}" alt="Desktop Image">
+      <!-- <img class="mobile-image" src="{{ section.settings.image_mobile | img_url: '200x' }}" alt="Mobile Image"> -->
+    </div>
+    <div class="text-container left">
+      <h2 class="section-title ">{{ section.settings.section_title }}</h2>
+      <div class="section-subtitle">{{ section.settings.section_subtitle }}</div>
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'description_one' %}
+            <div class="description-one">
+              {{ block.settings.description_one }}
+            </div>
+          
+          {% when 'bullet_points' %}
+            <div class="bullet-points">
+              <div class="flip-container">
+              <img class="icon" src="{{ block.settings.icon | img_url: '50x' }}" style="background: {{ block.settings.bullet_bg }};" alt="Bullet Point Icon">
+              </div>
+              <div class="content">{{ block.settings.content }}</div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with Text - Custom",
+  "tag": "section",
+  "class": "image_with_text_eightTfour",
+  "settings": [
+    {
+      "type": "image_picker",
+      "label": "Image (desktop)",
+      "id": "image_desktop"
+    },
+    {
+      "type": "text",
+      "label": "Section Title",
+      "id": "section_title"
+    },
+    {
+      "type": "richtext",
+      "label": "Section Subtitle",
+      "id": "section_subtitle"
+    },
+    {
+      "type": "checkbox",
+      "label": "Right Image | Left Content",
+      "id": "right_image_left_content",
+      "default": false,
+      "info": "Check if you want to show image right side"
+    },
+     {
+      "type": "text",
+      "label": "Flex Direction for Mobile",
+      "id": "flex_dir"
+    },
+    {
+      "type": "color",
+      "label": "Background Color",
+      "id": "background_color",
+      "default": "#f2f2f2",
+      "info": "Section Background color"
+    },
+    {
+      "type": "text",
+      "label": "Background Color Degree",
+      "id": "deg",
+      "default": "45deg"
+    },
+     {
+      "type": "color",
+      "label": "Background Color Linear 1",
+      "id": "background_color_1",
+      "default": "#f2f2f2"
+    },
+     {
+      "type": "text",
+      "label": "Background Color Linear 1 Opacity",
+      "id": "background_color_1_o",
+      "default": "50"
+    },
+     {
+      "type": "color",
+      "label": "Background Color Linear 2",
+      "id": "background_color_2",
+      "default": "#f2f2f2"
+    },
+    {
+      "type": "text",
+      "label": "Background Color Linear 2 Opacity",
+      "id": "background_color_2_o",
+      "default": "50"
+    },
+     {
+      "type": "image_picker",
+      "label": "Background Image",
+      "id": "background_image"
+    },
+    
+    {
+      "type": "range",
+      "label": "Container Size",
+      "id": "container_size",
+      "default": 1200,
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "header",
+      "content": "Margin Top"
+    },
+    {
+      "type": "range",
+      "id": "mg_top_desktop",
+      "label": "desktop",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type":
+
+ "range",
+      "id": "mg_top_tablet",
+      "label": "tablet",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "mg_top_mobile",
+      "label": "mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Margin bottom"
+    },
+    {
+      "type": "range",
+      "id": "mg_bottom_desktop",
+      "label": "desktop",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "mg_bottom_tablet",
+      "label": "tablet",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "mg_bottom_mobile",
+      "label": "mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Padding Left & Right",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Font Sizings"
+    },
+    {
+      "type": "range",
+      "label": "Title (Desktop)",
+      "id": "title_sizing",
+      "min": 20,
+      "max": 52,
+      "step": 1,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "label": "Subtitle (Desktop)",
+      "id": "section_subtitle_sizing",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "label": "Description (Desktop)",
+      "id": "section_desc_sizing",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "label": "Bullet Points (Desktop)",
+      "id": "bullet_font_sizing",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "label": "Title (Mobile)",
+      "id": "title_sizing_mobile",
+      "min": 20,
+      "max": 52,
+      "step": 1,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "label": "Subtitle (Mobile)",
+      "id": "section_subtitle_sizing_mobile",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "label": "Description (Mobile)",
+      "id": "section_desc_sizing_mobile",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "label": "Bullet Points (Desktop)",
+      "id": "bullet_font_sizing_mobile",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "description_one",
+      "name": "Description One",
+      "settings": [
+        {
+          "type": "richtext",
+          "label": "Description One",
+          "id": "description_one"
+        }
+      ]
+    },
+    {
+      "type": "bullet_points",
+      "name": "Bullet Points",
+      "settings": [
+        {
+          "type": "image_picker",
+          "label": "Icon",
+          "id": "icon"
+        },
+        {
+          "type": "richtext",
+          "label": "Content",
+          "id": "content"
+        },
+        {
+       "type": "color",
+      "label": "Bullet Icon BG",
+      "id": "bullet_bg",
+      "default": "#e5e5da"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with Text - Custom"
+    }
+  ]
+}
+{% endschema %} 

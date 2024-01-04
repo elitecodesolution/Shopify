@@ -1,0 +1,101 @@
+{% assign mainprice = settings.free_shipping_price | plus: 0 %}  <!--make string to number -->
+<!-- mainprice {{ mainprice }} -->
+
+{% assign cartTotalString =  cart.total_price | money_without_trailing_zeros | remove:'$' | remove:',' %}
+<!-- {{ cartTotalString }} -->
+
+{% assign cartTotalNumeric = cartTotalString | plus: 0 %}
+<!-- cartTotalNumeric: {{ cartTotalNumeric }} -->
+
+{% assign totalprice = mainprice | minus: cartTotalNumeric %}
+<!-- totalprice: {{ totalprice }} -->
+
+{% assign percentflow = 100 | times: cartTotalNumeric %}
+<!-- percentflow: {{ percentflow }} -->
+
+{% assign percentdivision = percentflow | divided_by: mainprice %}
+<!-- percentdivision: {{ percentdivision }} -->
+
+<div class="cart-uniq-wrapper">
+  {% if cartTotalNumeric < mainprice %}
+    <p class="cart-uniq-text">
+      You are $<span class="cart-uniq-numcount">{{ totalprice }}</span> away from free shipping 
+    </p>
+  {% else %}
+    <p class="cart-uniq-success">Congrats! You are eligible for <b>FREE Shipping</b></p>
+  {% endif %}
+  <div class="cart-uniq-bar">
+    <span class="cart-uniq-progress" id="cart-uniq-progress" style="width: {{ percentdivision }}%;"></span>
+  </div>
+</div>
+
+<style>
+.cart-uniq-wrapper{
+  max-width: 100%;
+  margin: 20px auto;
+}
+.cart-uniq-bar{
+  position: relative;
+  background-color: #ccc;
+  height: 1rem;
+}
+.cart-uniq-progress {
+  position:absolute;
+  top: 0px;
+  left: 0px;
+  min-width: 0px;
+  max-width: 100%;
+  display: block;
+  height: 100%;
+  background: red;
+  width: {{percentdivision}}%;
+}  
+.cart-uniq-progress:after {
+  content: "";
+  width: 15px;
+  height: 15px;
+  background-color: #ea0101;
+  position: absolute;
+  right: 0px;
+  top: -3px;
+}
+.cart-uniq-success {
+  color: #37d216;
+  font-weight: bold;
+}
+.cart-uniq-success ~  .cart-uniq-bar .cart-uniq-progress {
+  background: #37d216;
+}
+.cart-uniq-success ~  .cart-uniq-bar .cart-uniq-progress::after {
+  background: #2eb511;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var progressBar = document.getElementById("cart-uniq-progress");
+  var width = 0;
+  var targetWidth = {{ percentdivision }};
+  var duration = 500; // Adjust the duration as needed (in milliseconds)
+  var startTime;
+
+  function animate() {
+    var currentTime = Date.now();
+    var deltaTime = currentTime - startTime;
+    var progress = Math.min(1, deltaTime / duration);
+    width = targetWidth * progress;
+    progressBar.style.width = width + "%";
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  function startAnimation() {
+    startTime = Date.now();
+    requestAnimationFrame(animate);
+  }
+
+  startAnimation();
+});
+</script>

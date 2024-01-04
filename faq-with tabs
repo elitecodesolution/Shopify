@@ -1,0 +1,277 @@
+<style>
+  .tabs.section .faq-banner-image h2 {
+    font-size: 4.5rem;
+    color: #FFF;
+    font-family: acumin-pro-extra-condensed,sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0;
+    margin: 0;
+}
+
+.tabs.section .faq-breadcrumbs span {
+    color: #FFF;
+    font-size: 14px!important;
+    font-family: acumin-pro,sans-serif;
+}
+
+.tabs.section .faq-banner-image {
+    background-repeat: no-repeat;
+    padding-left: 8rem;
+    padding-top: 17rem;
+    padding-bottom: 2rem;
+    background-size: cover;
+}
+
+.tabs.section section.faq-banner {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+}
+.tabs.section li.active {
+    border-bottom: 2px solid #000;
+}
+ .tabs.section  ul.tabs-nav {
+    display: flex;
+    justify-content: space-around;
+}
+.tabs.section .tabs-nav li {
+  width: 100%;
+}
+.tabs.section a {
+  color: #000;
+  display: block;
+  font-weight: 600;
+  padding: 10px 0;
+  text-align: center;
+  text-decoration: none;
+}
+.tabs.section .tab-active a {
+  color: #000;
+  cursor: default;
+}
+  .tabs.section nav.header__link-list.justify-center.wrap {
+    align-items: center;
+}
+.tabs.section ::marker {
+    display: none !important;
+    opacity: 0 !important;
+    background: transparent;
+    color: transparent;
+}
+   .tabs.section .hide{
+   display:none;
+ }
+  .tabs.section .active{
+   display:block;
+ }
+.tabs.section .tabs-stage {
+  clear: both;
+  padding: 24px 30px;
+  position: relative;
+  top: -1px;
+}
+.tabs.section .faqcontainer {
+  width: 80%;
+  max-width: 600px;
+  margin: 50px auto;
+}
+
+.tabs.section button.accordion {
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  padding: 15px 20px;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+/* button.accordion:after {
+  font-family: FontAwesome;
+  content: "\f150";
+  font-family: "fontawesome";
+  font-size: 18px;
+  float: right;
+}
+
+button.accordion.is-open:after {
+  content: "\f151";
+} */
+
+.tabs.section button.accordion:hover,
+.tabs.section button.accordion.is-open {
+  background-color: transparent !important;
+}
+
+.tabs.section .accordion-content {
+  background-color: white;
+  border-left: 1px solid whitesmoke;
+  border-right: 1px solid whitesmoke;
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+}
+</style>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<div class="tabs section" id="tabs">
+  <ul class="tabs-nav">
+  {% assign tab = 0 %}
+  {% assign tabs = '' %}
+     {% for block in section.blocks %}
+       {% if block.settings.title != blank %}
+    <li id="{{ block.settings.title }}" class="nav-link{% if  tab == 0 %} active1{% endif %}"><a href="#tab-1{{ block.settings.title }}">{{ block.settings.title }}</a></li>
+          {% assign tabs = tabs | append:',' %}
+          {% assign tabs = tabs | append:block.settings.title %}
+         {% endif %}
+        {% endfor %}
+  </ul>
+  {% assign tabs = tabs | remove_first:',' | split:',' %}
+  {% assign textBlocks = section.blocks | where:'type','text' %}  
+   <div class="tabs-stage">
+      <div id="tab1">
+        {% assign tab = 0 %}
+        {% for t in tabs %}
+          {% assign _t = t | strip | handle %}
+          <div id="faqcontainer" class="faqcontainer{% if tab == 0 %} active1{% endif %}">
+           {% for block in textBlocks %}
+             {% assign chouse_title = block.settings.chouse_title | strip | handle %}
+             {% if _t == chouse_title %}
+             {% if block.settings.que != blank %}                   
+                    <button class="accordion">{{ block.settings.que }}</button>
+                    <div class="accordion-content">
+                      <p>{{ block.settings.ans }}</p>
+                    </div>                  
+               {% endif %}                              
+               {% endif %}               
+             {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+    </div>
+</div> 
+
+
+{% schema %}
+  {
+    "name": "faq-accordion",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "title",
+        "name": "Accordion Main Title",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Tab title"
+          }
+        ]
+      },
+       {
+        "type": "text",
+        "name": "Accordion",
+        "settings": [
+          {
+            "type": "text",
+            "id": "chouse_title",
+            "label": "Chouse tab title"
+          },
+          {
+            "type": "text",
+            "id": "que",
+            "label": "question"
+          },
+          {
+            "type": "text",
+            "id": "ans",
+            "label": "answer"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "faq-accordion",
+        "category": "text"
+      }
+    ]
+  }
+{% endschema %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+//   // tab code start
+// $('.tabs-stage li').hide();
+// $('.tabs-stage div:first').show();
+// $('.tabs-nav li:first').addClass('tab-active');
+
+
+// // Change tab class and display content
+// $('.tabs-nav a').on('click', function(event){
+//   event.preventDefault();
+//   $('.tabs-nav li').removeClass('tab-active');
+//   $(this).parent().addClass('tab-active');
+//   $('.tabs-stage #tab1').hide();
+//   $($(this).attr('href')).show();
+// }); 
+ // tab code end
+$(function () {
+        $("#tabs ul.tabs-nav li a").each(function (index) {
+            $(this).attr("data-tag", "spec" + index.toString());            
+        });
+        $("#tab1 .faqcontainer").each(function (index) {
+            $(this).attr("id", "spec" + index.toString());
+        })
+        $("#tabs").tabs();
+    });   
+
+    
+  $(".faqcontainer:first").addClass('active2');
+ $(".faqcontainer").addClass('hide');
+  $('.faqcontainer:first').removeClass('hide');
+  // Click function
+   $('.tabs-nav li').click(function(){
+   $('.tabs-nav li').removeClass('active2');
+     $(this).addClass('active2'); 
+
+    var activeTab = $(this).find('a').attr('href');
+    $(activeTab).fadeIn();
+    return false;
+    $('#'+tagid).addClass('active2').removeClass('hide');
+  });
+  
+  
+  
+   $('.tabs-nav li a').click(function(){
+             $('.tabs-nav li a').removeClass('active1');
+            $(this).addClass('active1');
+            var tagid = $(this).data('tag');
+             $('.faqcontainer').removeClass('active1').addClass('hide');
+            $('#'+tagid).addClass('active1').removeClass('hide');
+        });
+
+   // accordion code start
+  
+const accordionBtns = document.querySelectorAll(".accordion");
+accordionBtns.forEach((accordion) => {
+  accordion.onclick = function () {
+    this.classList.toggle("is-open");
+
+    let content = this.nextElementSibling;
+    console.log(content);
+
+    if (content.style.maxHeight) {
+      //this is if the accordion is open
+      content.style.maxHeight = null;
+    } else {
+      //if the accordion is currently closed
+      content.style.maxHeight = content.scrollHeight + "px";
+      console.log(content.style.maxHeight);
+    }
+  };
+});
+  // accordion code end
+</script>
